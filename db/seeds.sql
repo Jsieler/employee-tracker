@@ -1,9 +1,9 @@
-INSERT INTO department (dept_name) 
+INSERT INTO department (name) 
 VALUES
 ('Executive Office'),
 ('Basketball Operations'),
 ('Broadcasting'),
-('Player')
+('Player');
 
 INSERT INTO role (title, salary, department_id)
 VALUES
@@ -19,7 +19,7 @@ VALUES
 ('ALL STAR PLAYER', 25000000, 4),
 ('STARTER', 15000000, 4),
 ('ROLE PLAYER',11000000, 4),
-('BENCH RESERVE', 400000, 4)
+('BENCH RESERVE', 400000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
@@ -43,4 +43,4 @@ VALUES
 ('Jordan', 'Clarkson', 12, NULL),
 ('Derrick', 'Favors', 12, NULL),
 ('Georges', 'Niang', 13, NULL),
-('Miye', 'Oni', 13, NULL)
+('Miye', 'Oni', 13, NULL);
