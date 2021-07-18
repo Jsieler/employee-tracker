@@ -36,6 +36,7 @@ const init = () => {
         { name: 'view all departments', value: 'VIEW_ALL_DEPARTMENTS' },
         { name: 'view all roles', value: 'VIEW_ALL_ROLES' },
         { name: 'view all employees', value: 'VIEW_ALL_EMPLOYEES' },
+        { name: 'add a department', value: 'ADD_A_DEPARTMENT' },
         { name: 'add a role', value: 'ADD_A_ROLE' },
         { name: 'add an emmployee', value: 'ADD_AN_EMPLOYEE' },
         { name: 'update an employee role', value: 'UPDATE_AN_EMPLOYEE_ROLE' }
@@ -51,6 +52,9 @@ const init = () => {
         break;
       case 'VIEW_ALL_EMPLOYEES':
         viewEmployees();
+        break;
+      case 'ADD_A_DEPARTMENT':
+        addDepartment();
         break;
       case 'ADD_A_ROLE':
         addRole();
@@ -82,7 +86,7 @@ const viewDepartments = () => {
 
 // View Roles
 const viewRoles = () => {
-  const sql = `SELECT role.id, role.title AS role,
+  const sql = `SELECT role.id, role.title AS job_title, role.salary,
   department.name AS department FROM role
   LEFT JOIN department ON role.department_id = department.id
   ORDER BY department.id`;
@@ -115,17 +119,51 @@ const viewEmployees = () => {
   });
 }
 
+const addDepartment = () => {
+  
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'departName',
+      message: 'Which department would you like to add?',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter a department name!');
+          return false;
+        }
+      }
+    }
+  ])
+  .then(answer => {
+    let newDepartment = answer.departName;
+  
+    db.query('INSERT INTO department SET name=? ', [newDepartment], (err, res) => {
+      if (err) throw err;
+
+    console.log(res.affectedRows + ' Department added!\n');
+    init();
+    })
+  });
+}
+
+
 const addRole = () => {
 
 }
 
 const addEmployee = () => {
-
+ 
 }
 
 const updateEmployee = () => {
+  
+};
 
-}
+    
+ 
+
 
 
 
