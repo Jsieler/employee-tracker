@@ -72,6 +72,11 @@ const init = () => {
 
 // View all Departments
 const viewDepartments = () => {
+  console.log(`
+================
+  DEPARTMENTS
+================
+`);
   const sql = `SELECT * FROM department`;
 
   db.query(sql, (err, rows) => {
@@ -86,6 +91,11 @@ const viewDepartments = () => {
 
 // View Roles
 const viewRoles = () => {
+  console.log(`
+=========
+  ROLES
+=========
+`);
   const sql = `SELECT role.id, role.title AS job_title, role.salary,
   department.name AS department FROM role
   LEFT JOIN department ON role.department_id = department.id
@@ -103,6 +113,11 @@ const viewRoles = () => {
 
 // View Employess 
 const viewEmployees = () => {
+  console.log(`
+===============
+   EMPLOYEES
+===============
+`);
   const sql = `SELECT employee.id, CONCAT(employee.first_name, ' ', employee.last_name) AS employee, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee
   LEFT JOIN employee manager ON manager.id = employee.manager_id
   JOIN role ON(role.id = employee.role_id)
@@ -121,7 +136,12 @@ const viewEmployees = () => {
 
 // Add new Department
 const addDepartment = () => {
-  
+  console.log(`
+=====================
+    ADD DEPARTMENT
+=====================
+`);
+
   inquirer.prompt([
     {
       type: 'input',
@@ -137,20 +157,25 @@ const addDepartment = () => {
       }
     }
   ])
-  .then(answer => {
-    let newDepartment = answer.departName;
-  
-    db.query('INSERT INTO department SET name=? ', [newDepartment], (err, res) => {
-      if (err) throw err;
+    .then(answer => {
+      let newDepartment = answer.departName;
 
-    console.log(res.affectedRows + ' Department added!\n');
-    init();
-    })
-  });
+      db.query('INSERT INTO department SET name=? ', [newDepartment], (err, res) => {
+        if (err) throw err;
+
+        console.log(res.affectedRows + ' Department added!\n');
+        init();
+      })
+    });
 }
 
 // Add New Role
 const addRole = () => {
+  console.log(`
+================
+    ADD ROLE
+================
+`);
   inquirer.prompt([
     {
       type: 'input',
@@ -192,23 +217,28 @@ const addRole = () => {
       }
     }
   ])
-  .then(answer => {
-    let newRole = answer.roleTitle;
-    let newSalary = answer.roleSalary;
-    let newRoleId = answer.roleDepId;
+    .then(answer => {
+      let newRole = answer.roleTitle;
+      let newSalary = answer.roleSalary;
+      let newRoleId = answer.roleDepId;
 
-  
-    db.query('INSERT INTO role (title, salary, department_id) Values (?,?,?) ', [newRole,newSalary,newRoleId], (err, res) => {
-      if (err) throw err;
 
-    console.log(res.affectedRows + ' Role added!\n');
-    init();
-    })
-  });
+      db.query('INSERT INTO role (title, salary, department_id) Values (?,?,?) ', [newRole, newSalary, newRoleId], (err, res) => {
+        if (err) throw err;
+
+        console.log(res.affectedRows + ' Role added!\n');
+        init();
+      })
+    });
 }
 
 // Add New Employee
-const addEmployee = () =>  {
+const addEmployee = () => {
+  console.log(`
+=====================
+    ADD EMPLOYEE
+=====================
+`);
   inquirer.prompt([
     {
       type: 'input',
@@ -263,24 +293,65 @@ const addEmployee = () =>  {
       }
     }
   ])
-  .then(answer => {
-    let newFirstName = answer.firstName;
-    let newLastName = answer.lastName;
-    let newEmpID = answer.empRoleId;
-    let newMangID = answer.mangId
+    .then(answer => {
+      let newFirstName = answer.firstName;
+      let newLastName = answer.lastName;
+      let newEmpID = answer.empRoleId;
+      let newMangID = answer.mangId
 
-  
-    db.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) Values (?,?,?,?) ', [newFirstName,newLastName,newEmpID,newMangID], (err, res) => {
-      if (err) throw err;
 
-    console.log(res.affectedRows + ' Employee added!\n');
-    init();
-    })
-  });
+      db.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) Values (?,?,?,?) ', [newFirstName, newLastName, newEmpID, newMangID], (err, res) => {
+        if (err) throw err;
+
+        console.log(res.affectedRows + ' Employee added!\n');
+        init();
+      })
+    });
 }
 
 const updateEmployee = () => {
-  
+  console.log(`
+=====================
+    UPDATE EMPLOYEE
+=====================
+`);
+  inquirer.prompt([
+    {
+      type: 'number',
+      name: 'updateEmployee',
+      message: 'Enter employees ID number you wish to update!',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter employee ID!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'number',
+      name: 'updateRole',
+      message: 'Please update the employees new role',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please input a new role id!');
+          return false;
+        }
+      }
+    }
+  ])
+
+    .then((answer) => {
+      db.query(
+        `UPDATE employee SET role_id = ${answer.updateRole} WHERE id = ${answer.updateEmployee}`, (err, res) => {
+          if (err) throw err;
+          console.log(res.affectedRows + ' Employee Updated!\n');
+          init();
+        })
+    });
 };
 
     
