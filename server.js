@@ -119,6 +119,7 @@ const viewEmployees = () => {
   });
 }
 
+// Add new Department
 const addDepartment = () => {
   
   inquirer.prompt([
@@ -148,13 +149,134 @@ const addDepartment = () => {
   });
 }
 
-
+// Add New Role
 const addRole = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'roleTitle',
+      message: 'Add a new role title!',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter a role title!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'roleSalary',
+      message: 'Add a new role salary!',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter a role salary!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'roleDepId',
+      message: 'Add a department id for the new role!',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter an id!');
+          return false;
+        }
+      }
+    }
+  ])
+  .then(answer => {
+    let newRole = answer.roleTitle;
+    let newSalary = answer.roleSalary;
+    let newRoleId = answer.roleDepId;
 
+  
+    db.query('INSERT INTO role (title, salary, department_id) Values (?,?,?) ', [newRole,newSalary,newRoleId], (err, res) => {
+      if (err) throw err;
+
+    console.log(res.affectedRows + ' Role added!\n');
+    init();
+    })
+  });
 }
 
-const addEmployee = () => {
- 
+// Add New Employee
+const addEmployee = () =>  {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: 'Whats employees first name?',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter a name!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: 'Whats employees last name?',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter a name!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'empRoleId',
+      message: 'Add an role id for employee!',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter an id!');
+          return false;
+        }
+      }
+    },
+    {
+      type: 'input',
+      name: 'mangId',
+      message: 'Please enter employees manager ID',
+      validate: (answer) => {
+        if (answer) {
+          return true;
+        } else {
+          console.log('Please enter an id!');
+          return false;
+        }
+      }
+    }
+  ])
+  .then(answer => {
+    let newFirstName = answer.firstName;
+    let newLastName = answer.lastName;
+    let newEmpID = answer.empRoleId;
+    let newMangID = answer.mangId
+
+  
+    db.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) Values (?,?,?,?) ', [newFirstName,newLastName,newEmpID,newMangID], (err, res) => {
+      if (err) throw err;
+
+    console.log(res.affectedRows + ' Employee added!\n');
+    init();
+    })
+  });
 }
 
 const updateEmployee = () => {
