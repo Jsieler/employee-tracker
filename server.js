@@ -99,7 +99,7 @@ const viewRoles = () => {
   const sql = `SELECT role.id, role.title AS job_title, role.salary,
   department.name AS department FROM role
   LEFT JOIN department ON role.department_id = department.id
-  ORDER BY department.id`;
+  ORDER BY role.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -122,7 +122,7 @@ const viewEmployees = () => {
   LEFT JOIN employee manager ON manager.id = employee.manager_id
   JOIN role ON(role.id = employee.role_id)
   JOIN department ON(department.id = role.department_id)
-  ORDER BY role.id`;
+  ORDER BY employee.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
